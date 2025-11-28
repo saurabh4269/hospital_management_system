@@ -1,0 +1,2012 @@
+{
+  "id": "surge_guard_mvp_root",
+  "nodes": [
+    {
+      "id": "frontend_app",
+      "label": "Frontend \u2013 Intelligent Command Dashboard",
+      "inputs": [
+        {
+          "id": "in_http_responses",
+          "label": "API responses from backend",
+          "metadata": {}
+        }
+      ],
+      "outputs": [
+        {
+          "id": "out_http_requests",
+          "label": "API requests to backend",
+          "metadata": {}
+        }
+      ],
+      "content": {
+        "type": "code",
+        "value": "React + Vite single-page app under Frontend/src. Routes: / (Dashboard), /actions (Action Hub), /advisory (Public Advisory Console), /raw-data (Raw Data Streams). All backend access goes through a DataService abstraction."
+      },
+      "graph": {
+        "id": "frontend_graph",
+        "nodes": [
+          {
+            "id": "frontend_router",
+            "label": "App Router",
+            "inputs": [
+              {
+                "id": "in_url",
+                "label": "Browser URL",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_route_dashboard",
+                "label": "Route -> Dashboard",
+                "metadata": {}
+              },
+              {
+                "id": "out_route_actions",
+                "label": "Route -> Action Hub",
+                "metadata": {}
+              },
+              {
+                "id": "out_route_advisory",
+                "label": "Route -> Advisory Console",
+                "metadata": {}
+              },
+              {
+                "id": "out_route_raw_data",
+                "label": "Route -> Raw Data",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "code",
+              "value": "BrowserRouter + Routes + Route in Frontend/src/App.tsx."
+            },
+            "graph": null,
+            "metadata": {
+              "file": "Frontend/src/App.tsx"
+            }
+          },
+          {
+            "id": "frontend_layout_shell",
+            "label": "Layout Shell + Sidebars",
+            "inputs": [
+              {
+                "id": "in_route_child",
+                "label": "Active routed page component",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_epidemic_overlay_update",
+                "label": "Epidemic overlay updates from sidebar tool",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "code",
+              "value": "Layout component providing navigation, sidebars, Toaster, and DashboardProvider. See Frontend/src/components/layout/Layout.tsx."
+            },
+            "graph": {
+              "id": "layout_graph",
+              "nodes": [
+                {
+                  "id": "epidemic_control_sidebar",
+                  "label": "Epidemic Control Sidebar",
+                  "inputs": [
+                    {
+                      "id": "in_patient_addresses",
+                      "label": "Text / PDF derived addresses",
+                      "metadata": {}
+                    }
+                  ],
+                  "outputs": [
+                    {
+                      "id": "out_epidemic_overlay",
+                      "label": "Parsed patients + hotspots",
+                      "metadata": {}
+                    }
+                  ],
+                  "content": {
+                    "type": "code",
+                    "value": "SidebarEpidemicControl: lets user paste/upload addresses and generates mock epidemic overlay."
+                  },
+                  "graph": null,
+                  "metadata": {
+                    "file": "Frontend/src/components/dashboard/SidebarEpidemicControl.tsx"
+                  }
+                },
+                {
+                  "id": "resource_trend_sidebar",
+                  "label": "Resource Trend Sidebar",
+                  "inputs": [
+                    {
+                      "id": "in_resource_history",
+                      "label": "Time-series resource data",
+                      "metadata": {}
+                    }
+                  ],
+                  "outputs": [
+                    {
+                      "id": "out_trend_insights",
+                      "label": "Resource trend visualization",
+                      "metadata": {}
+                    }
+                  ],
+                  "content": {
+                    "type": "code",
+                    "value": "SidebarResourceTrend: displays mock oxygen/staff trends using Recharts."
+                  },
+                  "graph": null,
+                  "metadata": {
+                    "file": "Frontend/src/components/dashboard/SidebarResourceTrend.tsx"
+                  }
+                }
+              ],
+              "edges": [],
+              "metadata": {}
+            },
+            "metadata": {
+              "file": "Frontend/src/components/layout/Layout.tsx"
+            }
+          },
+          {
+            "id": "dashboard_page",
+            "label": "Dashboard Page \u2013 Command Center",
+            "inputs": [
+              {
+                "id": "in_route",
+                "label": "Route activation from router",
+                "metadata": {}
+              },
+              {
+                "id": "in_metrics",
+                "label": "KPIMetrics from DashboardContext",
+                "metadata": {}
+              },
+              {
+                "id": "in_hospital_nodes",
+                "label": "HospitalNode[] from DashboardContext",
+                "metadata": {}
+              },
+              {
+                "id": "in_epidemic_overlay",
+                "label": "Epidemic overlay (patients + hotspots)",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_user_focus",
+                "label": "User-selected node/focus area",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "code",
+              "value": "Dashboard route component in Frontend/src/pages/Dashboard.tsx. Renders KPI ticker, map visualization, weather widget, and activity feed."
+            },
+            "graph": {
+              "id": "dashboard_graph",
+              "nodes": [
+                {
+                  "id": "dashboard_kpi_ticker",
+                  "label": "KPI Ticker",
+                  "inputs": [
+                    {
+                      "id": "in_metrics",
+                      "label": "KPIMetrics",
+                      "metadata": {}
+                    }
+                  ],
+                  "outputs": [
+                    {
+                      "id": "out_metric_selected",
+                      "label": "Metric clicked for detail",
+                      "metadata": {}
+                    }
+                  ],
+                  "content": {
+                    "type": "code",
+                    "value": "KPITicker component in Frontend/src/components/dashboard/KPITicker.tsx."
+                  },
+                  "graph": null,
+                  "metadata": {}
+                },
+                {
+                  "id": "dashboard_map_viz",
+                  "label": "Epidemic Diffusion Map",
+                  "inputs": [
+                    {
+                      "id": "in_hospital_nodes",
+                      "label": "HospitalNode[]",
+                      "metadata": {}
+                    },
+                    {
+                      "id": "in_epidemic_overlay",
+                      "label": "Patients + hotspots",
+                      "metadata": {}
+                    }
+                  ],
+                  "outputs": [
+                    {
+                      "id": "out_node_selected",
+                      "label": "Hospital selection events",
+                      "metadata": {}
+                    }
+                  ],
+                  "content": {
+                    "type": "code",
+                    "value": "MapViz component in Frontend/src/components/dashboard/MapViz.tsx (Leaflet map)."
+                  },
+                  "graph": null,
+                  "metadata": {}
+                },
+                {
+                  "id": "dashboard_weather_widget",
+                  "label": "Weather & AQI Widget",
+                  "inputs": [],
+                  "outputs": [],
+                  "content": {
+                    "type": "code",
+                    "value": "WeatherWidget component (currently mock/static) in Frontend/src/components/dashboard/WeatherWidget.tsx."
+                  },
+                  "graph": null,
+                  "metadata": {}
+                },
+                {
+                  "id": "dashboard_activity_feed",
+                  "label": "Activity Feed",
+                  "inputs": [],
+                  "outputs": [],
+                  "content": {
+                    "type": "code",
+                    "value": "ActivityFeed component (currently mock stream) in Frontend/src/components/dashboard/ActivityFeed.tsx."
+                  },
+                  "graph": null,
+                  "metadata": {}
+                }
+              ],
+              "edges": [],
+              "metadata": {}
+            },
+            "metadata": {
+              "file": "Frontend/src/pages/Dashboard.tsx"
+            }
+          },
+          {
+            "id": "action_hub_page",
+            "label": "Action Hub \u2013 Human-in-the-Loop Actions",
+            "inputs": [
+              {
+                "id": "in_route",
+                "label": "Route activation from router",
+                "metadata": {}
+              },
+              {
+                "id": "in_pending_actions",
+                "label": "Pending ActionItem[] from DataService",
+                "metadata": {}
+              },
+              {
+                "id": "in_execution_result",
+                "label": "Execution acknowledgement from backend",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_request_pending_actions",
+                "label": "Fetch pending actions",
+                "metadata": {}
+              },
+              {
+                "id": "out_approve_action",
+                "label": "Approve action with edited message",
+                "metadata": {}
+              },
+              {
+                "id": "out_reject_action",
+                "label": "Reject action",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "code",
+              "value": "ActionHub route in Frontend/src/pages/ActionHub.tsx. Renders list of ActionCard components and ApprovalModal."
+            },
+            "graph": {
+              "id": "action_hub_graph",
+              "nodes": [
+                {
+                  "id": "action_list",
+                  "label": "Action List",
+                  "inputs": [
+                    {
+                      "id": "in_pending_actions",
+                      "label": "Pending ActionItem[]",
+                      "metadata": {}
+                    }
+                  ],
+                  "outputs": [
+                    {
+                      "id": "out_action_selected",
+                      "label": "User selected action",
+                      "metadata": {}
+                    }
+                  ],
+                  "content": {
+                    "type": "code",
+                    "value": "Rendered via ActionCard components (Frontend/src/components/actions/ActionCard.tsx)."
+                  },
+                  "graph": null,
+                  "metadata": {}
+                },
+                {
+                  "id": "approval_modal",
+                  "label": "Approval Modal",
+                  "inputs": [
+                    {
+                      "id": "in_action_to_review",
+                      "label": "ActionItem under review",
+                      "metadata": {}
+                    }
+                  ],
+                  "outputs": [
+                    {
+                      "id": "out_confirmed_action",
+                      "label": "Approved action + final message",
+                      "metadata": {}
+                    }
+                  ],
+                  "content": {
+                    "type": "code",
+                    "value": "ApprovalModal in Frontend/src/components/actions/ApprovalModal.tsx."
+                  },
+                  "graph": null,
+                  "metadata": {}
+                }
+              ],
+              "edges": [],
+              "metadata": {}
+            },
+            "metadata": {
+              "file": "Frontend/src/pages/ActionHub.tsx"
+            }
+          },
+          {
+            "id": "advisory_console_page",
+            "label": "Public Advisory Console",
+            "inputs": [
+              {
+                "id": "in_route",
+                "label": "Route activation from router",
+                "metadata": {}
+              },
+              {
+                "id": "in_advisory_draft",
+                "label": "Draft advisory text from backend / mock",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_generate_advisory",
+                "label": "Generate advisory from prompt",
+                "metadata": {}
+              },
+              {
+                "id": "out_publish_advisory",
+                "label": "Publish finalized advisory",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "code",
+              "value": "AdvisoryConsole route in Frontend/src/pages/AdvisoryConsole.tsx."
+            },
+            "graph": {
+              "id": "advisory_console_graph",
+              "nodes": [
+                {
+                  "id": "advisory_prompt_input",
+                  "label": "Scenario Prompt Input",
+                  "inputs": [],
+                  "outputs": [
+                    {
+                      "id": "out_prompt",
+                      "label": "User-entered scenario description",
+                      "metadata": {}
+                    }
+                  ],
+                  "content": {
+                    "type": "code",
+                    "value": "Textarea input for describing situation."
+                  },
+                  "graph": null,
+                  "metadata": {}
+                },
+                {
+                  "id": "advisory_draft_preview",
+                  "label": "Draft Preview Editor",
+                  "inputs": [
+                    {
+                      "id": "in_draft_text",
+                      "label": "Generated advisory draft",
+                      "metadata": {}
+                    }
+                  ],
+                  "outputs": [
+                    {
+                      "id": "out_finalized_text",
+                      "label": "Possibly edited advisory",
+                      "metadata": {}
+                    }
+                  ],
+                  "content": {
+                    "type": "code",
+                    "value": "Textarea bound to generated draft; acts as final content to publish."
+                  },
+                  "graph": null,
+                  "metadata": {}
+                }
+              ],
+              "edges": [],
+              "metadata": {}
+            },
+            "metadata": {
+              "file": "Frontend/src/pages/AdvisoryConsole.tsx"
+            }
+          },
+          {
+            "id": "raw_data_page",
+            "label": "Raw Data Streams Page",
+            "inputs": [
+              {
+                "id": "in_route",
+                "label": "Route activation from router",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_export_csv",
+                "label": "CSV export trigger",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "code",
+              "value": "RawData route in Frontend/src/pages/RawData.tsx. Currently uses in-memory mock table."
+            },
+            "graph": {
+              "id": "raw_data_graph",
+              "nodes": [
+                {
+                  "id": "raw_data_event_log",
+                  "label": "Event Log Table",
+                  "inputs": [],
+                  "outputs": [],
+                  "content": {
+                    "type": "code",
+                    "value": "Filterable, sortable table of mock events."
+                  },
+                  "graph": null,
+                  "metadata": {}
+                }
+              ],
+              "edges": [],
+              "metadata": {}
+            },
+            "metadata": {
+              "file": "Frontend/src/pages/RawData.tsx"
+            }
+          },
+          {
+            "id": "dashboard_context",
+            "label": "Dashboard Context Provider",
+            "inputs": [
+              {
+                "id": "in_metrics_response",
+                "label": "KPIMetrics from DataService",
+                "metadata": {}
+              },
+              {
+                "id": "in_nodes_response",
+                "label": "HospitalNode[] from DataService",
+                "metadata": {}
+              },
+              {
+                "id": "in_epidemic_overlay_update",
+                "label": "Epidemic overlay updates from sidebar",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_metrics_state",
+                "label": "KPIMetrics state to Dashboard",
+                "metadata": {}
+              },
+              {
+                "id": "out_nodes_state",
+                "label": "HospitalNode[] state to Dashboard",
+                "metadata": {}
+              },
+              {
+                "id": "out_epidemic_state",
+                "label": "Epidemic overlay state to MapViz",
+                "metadata": {}
+              },
+              {
+                "id": "out_metrics_request",
+                "label": "Trigger KPI refresh",
+                "metadata": {}
+              },
+              {
+                "id": "out_nodes_request",
+                "label": "Trigger hospital nodes refresh",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "code",
+              "value": "DashboardProvider and context defined in Frontend/src/context/DashboardContext.tsx."
+            },
+            "graph": null,
+            "metadata": {
+              "file": "Frontend/src/context/DashboardContext.tsx",
+              "pollingIntervalMs": 30000
+            }
+          },
+          {
+            "id": "data_service_client",
+            "label": "DataService Abstraction",
+            "inputs": [
+              {
+                "id": "in_metrics_request",
+                "label": "Request KPIMetrics",
+                "metadata": {}
+              },
+              {
+                "id": "in_nodes_request",
+                "label": "Request hospital nodes",
+                "metadata": {}
+              },
+              {
+                "id": "in_pending_actions_request",
+                "label": "Request pending actions",
+                "metadata": {}
+              },
+              {
+                "id": "in_approve_action",
+                "label": "Approve action with payload",
+                "metadata": {}
+              },
+              {
+                "id": "in_reject_action",
+                "label": "Reject action",
+                "metadata": {}
+              },
+              {
+                "id": "in_generate_advisory",
+                "label": "Generate advisory draft",
+                "metadata": {}
+              },
+              {
+                "id": "in_http_response",
+                "label": "HTTP response from backend",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_metrics_response",
+                "label": "KPIMetrics response",
+                "metadata": {}
+              },
+              {
+                "id": "out_nodes_response",
+                "label": "HospitalNode[] response",
+                "metadata": {}
+              },
+              {
+                "id": "out_pending_actions_response",
+                "label": "Pending ActionItem[] response",
+                "metadata": {}
+              },
+              {
+                "id": "out_action_execution_result",
+                "label": "Execution acknowledgement",
+                "metadata": {}
+              },
+              {
+                "id": "out_advisory_draft",
+                "label": "Generated advisory draft",
+                "metadata": {}
+              },
+              {
+                "id": "out_http_requests",
+                "label": "HTTP requests to backend",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "code",
+              "value": "Implements DataService interface defined in Frontend/src/types/index.ts. In demo mode uses MockDataService; in live mode uses HTTP calls to backend."
+            },
+            "graph": null,
+            "metadata": {
+              "file": "Frontend/src/services/index.ts",
+              "demoImplementation": "Frontend/src/services/MockDataService.ts",
+              "liveImplementationStatus": "stub (methods throw 'Not implemented')"
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge_router_to_dashboard",
+            "from": {
+              "node": "frontend_router",
+              "port": "out_route_dashboard"
+            },
+            "to": {
+              "node": "dashboard_page",
+              "port": "in_route"
+            },
+            "label": "Activates dashboard view when URL is /",
+            "metadata": {}
+          },
+          {
+            "id": "edge_router_to_action_hub",
+            "from": {
+              "node": "frontend_router",
+              "port": "out_route_actions"
+            },
+            "to": {
+              "node": "action_hub_page",
+              "port": "in_route"
+            },
+            "label": "Activates Action Hub when URL is /actions",
+            "metadata": {}
+          },
+          {
+            "id": "edge_router_to_advisory_console",
+            "from": {
+              "node": "frontend_router",
+              "port": "out_route_advisory"
+            },
+            "to": {
+              "node": "advisory_console_page",
+              "port": "in_route"
+            },
+            "label": "Activates Advisory Console when URL is /advisory",
+            "metadata": {}
+          },
+          {
+            "id": "edge_router_to_raw_data",
+            "from": {
+              "node": "frontend_router",
+              "port": "out_route_raw_data"
+            },
+            "to": {
+              "node": "raw_data_page",
+              "port": "in_route"
+            },
+            "label": "Activates Raw Data view when URL is /raw-data",
+            "metadata": {}
+          },
+          {
+            "id": "edge_context_to_dashboard_metrics",
+            "from": {
+              "node": "dashboard_context",
+              "port": "out_metrics_state"
+            },
+            "to": {
+              "node": "dashboard_page",
+              "port": "in_metrics"
+            },
+            "label": "Provides KPI metrics via context",
+            "metadata": {}
+          },
+          {
+            "id": "edge_context_to_dashboard_nodes",
+            "from": {
+              "node": "dashboard_context",
+              "port": "out_nodes_state"
+            },
+            "to": {
+              "node": "dashboard_page",
+              "port": "in_hospital_nodes"
+            },
+            "label": "Provides hospital nodes via context",
+            "metadata": {}
+          },
+          {
+            "id": "edge_context_to_dashboard_epidemic",
+            "from": {
+              "node": "dashboard_context",
+              "port": "out_epidemic_state"
+            },
+            "to": {
+              "node": "dashboard_page",
+              "port": "in_epidemic_overlay"
+            },
+            "label": "Provides epidemic overlay state to dashboard",
+            "metadata": {}
+          },
+          {
+            "id": "edge_context_to_data_service_metrics_request",
+            "from": {
+              "node": "dashboard_context",
+              "port": "out_metrics_request"
+            },
+            "to": {
+              "node": "data_service_client",
+              "port": "in_metrics_request"
+            },
+            "label": "DashboardContext triggers KPI refresh",
+            "metadata": {}
+          },
+          {
+            "id": "edge_context_to_data_service_nodes_request",
+            "from": {
+              "node": "dashboard_context",
+              "port": "out_nodes_request"
+            },
+            "to": {
+              "node": "data_service_client",
+              "port": "in_nodes_request"
+            },
+            "label": "DashboardContext triggers hospital nodes refresh",
+            "metadata": {}
+          },
+          {
+            "id": "edge_data_service_to_context_metrics_response",
+            "from": {
+              "node": "data_service_client",
+              "port": "out_metrics_response"
+            },
+            "to": {
+              "node": "dashboard_context",
+              "port": "in_metrics_response"
+            },
+            "label": "DataService provides KPIMetrics",
+            "metadata": {}
+          },
+          {
+            "id": "edge_data_service_to_context_nodes_response",
+            "from": {
+              "node": "data_service_client",
+              "port": "out_nodes_response"
+            },
+            "to": {
+              "node": "dashboard_context",
+              "port": "in_nodes_response"
+            },
+            "label": "DataService provides HospitalNode[]",
+            "metadata": {}
+          },
+          {
+            "id": "edge_action_hub_to_data_service_pending",
+            "from": {
+              "node": "action_hub_page",
+              "port": "out_request_pending_actions"
+            },
+            "to": {
+              "node": "data_service_client",
+              "port": "in_pending_actions_request"
+            },
+            "label": "Action Hub requests pending actions",
+            "metadata": {}
+          },
+          {
+            "id": "edge_data_service_to_action_hub_pending",
+            "from": {
+              "node": "data_service_client",
+              "port": "out_pending_actions_response"
+            },
+            "to": {
+              "node": "action_hub_page",
+              "port": "in_pending_actions"
+            },
+            "label": "DataService returns pending actions",
+            "metadata": {}
+          },
+          {
+            "id": "edge_action_hub_to_data_service_approve",
+            "from": {
+              "node": "action_hub_page",
+              "port": "out_approve_action"
+            },
+            "to": {
+              "node": "data_service_client",
+              "port": "in_approve_action"
+            },
+            "label": "User-approved actions sent to DataService",
+            "metadata": {}
+          },
+          {
+            "id": "edge_action_hub_to_data_service_reject",
+            "from": {
+              "node": "action_hub_page",
+              "port": "out_reject_action"
+            },
+            "to": {
+              "node": "data_service_client",
+              "port": "in_reject_action"
+            },
+            "label": "Rejected actions sent to DataService",
+            "metadata": {}
+          },
+          {
+            "id": "edge_data_service_to_action_hub_execution_result",
+            "from": {
+              "node": "data_service_client",
+              "port": "out_action_execution_result"
+            },
+            "to": {
+              "node": "action_hub_page",
+              "port": "in_execution_result"
+            },
+            "label": "Execution acknowledgements delivered back to Action Hub",
+            "metadata": {}
+          },
+          {
+            "id": "edge_advisory_to_data_service_generate",
+            "from": {
+              "node": "advisory_console_page",
+              "port": "out_generate_advisory"
+            },
+            "to": {
+              "node": "data_service_client",
+              "port": "in_generate_advisory"
+            },
+            "label": "Advisory console requests advisory draft generation",
+            "metadata": {}
+          },
+          {
+            "id": "edge_data_service_to_advisory_draft",
+            "from": {
+              "node": "data_service_client",
+              "port": "out_advisory_draft"
+            },
+            "to": {
+              "node": "advisory_console_page",
+              "port": "in_advisory_draft"
+            },
+            "label": "DataService returns advisory draft text",
+            "metadata": {}
+          }
+        ],
+        "metadata": {
+          "rootComponent": "Frontend/src/App.tsx",
+          "router": "react-router-dom BrowserRouter/Routes/Route",
+          "demoModeEnvVar": "VITE_DEMO_MODE"
+        }
+      },
+      "metadata": {
+        "tech": [
+          "React",
+          "TypeScript",
+          "Vite",
+          "TailwindCSS",
+          "Leaflet",
+          "Recharts",
+          "Radix UI"
+        ],
+        "files": [
+          "Frontend/src/App.tsx",
+          "Frontend/src/components/layout/Layout.tsx",
+          "Frontend/src/pages/Dashboard.tsx",
+          "Frontend/src/pages/ActionHub.tsx",
+          "Frontend/src/pages/AdvisoryConsole.tsx",
+          "Frontend/src/pages/RawData.tsx",
+          "Frontend/src/context/DashboardContext.tsx",
+          "Frontend/src/services/index.ts",
+          "Frontend/src/services/MockDataService.ts",
+          "Frontend/src/types/index.ts"
+        ]
+      }
+    },
+    {
+      "id": "backend_service",
+      "label": "Backend \u2013 Orchestration & API",
+      "inputs": [],
+      "outputs": [],
+      "content": {
+        "type": "code",
+        "value": "Planned backend service implementing the DataService contract and coordinating forecasting, surge orchestration, and messaging."
+      },
+      "graph": {
+        "id": "backend_graph",
+        "nodes": [
+          {
+            "id": "backend_http_api",
+            "label": "HTTP API Layer",
+            "inputs": [
+              {
+                "id": "in_http_request",
+                "label": "Incoming HTTP request",
+                "metadata": {}
+              },
+              {
+                "id": "in_kpi_response",
+                "label": "KPI response payload",
+                "metadata": {}
+              },
+              {
+                "id": "in_nodes_response",
+                "label": "Hospital nodes response payload",
+                "metadata": {}
+              },
+              {
+                "id": "in_actions_response",
+                "label": "Actions response payload",
+                "metadata": {}
+              },
+              {
+                "id": "in_advisory_response",
+                "label": "Advisory draft response payload",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_kpi_request",
+                "label": "Dispatch to KPI controller",
+                "metadata": {}
+              },
+              {
+                "id": "out_nodes_request",
+                "label": "Dispatch to hospital controller",
+                "metadata": {}
+              },
+              {
+                "id": "out_actions_request",
+                "label": "Dispatch to actions controller",
+                "metadata": {}
+              },
+              {
+                "id": "out_approve_request",
+                "label": "Dispatch to approve handler",
+                "metadata": {}
+              },
+              {
+                "id": "out_reject_request",
+                "label": "Dispatch to reject handler",
+                "metadata": {}
+              },
+              {
+                "id": "out_generate_advisory_request",
+                "label": "Dispatch to advisory controller",
+                "metadata": {}
+              },
+              {
+                "id": "out_http_response",
+                "label": "Serialized HTTP response",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "config",
+              "value": "Defines REST endpoints mapping 1:1 to DataService methods: GET /api/dashboard/kpi, GET /api/hospitals, GET /api/actions/pending, POST /api/actions/{id}/approve, POST /api/actions/{id}/reject, POST /api/advisory/generate."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "backend_kpi_controller",
+            "label": "KPI Metrics Controller",
+            "inputs": [
+              {
+                "id": "in_kpi_request",
+                "label": "KPI fetch request",
+                "metadata": {}
+              },
+              {
+                "id": "in_forecast_signals",
+                "label": "Surge forecast signals",
+                "metadata": {}
+              },
+              {
+                "id": "in_hospital_state",
+                "label": "Current hospital state",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_kpi_response",
+                "label": "KPIMetrics JSON",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "logic",
+              "value": "Aggregates current occupancy, forecasted surge confidence, active alert counts, and critical hospital count into KPIMetrics shape expected by frontend."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "backend_hospital_controller",
+            "label": "Hospital Nodes Controller",
+            "inputs": [
+              {
+                "id": "in_nodes_request",
+                "label": "Hospital list request",
+                "metadata": {}
+              },
+              {
+                "id": "in_hospital_state",
+                "label": "Current hospital state from store",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_nodes_response",
+                "label": "HospitalNode[] JSON",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "logic",
+              "value": "Shapes hospital state into HospitalNode[] with occupancy, status, and resource breakdown."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "backend_actions_controller",
+            "label": "Actions Controller",
+            "inputs": [
+              {
+                "id": "in_actions_request",
+                "label": "List pending actions",
+                "metadata": {}
+              },
+              {
+                "id": "in_approve_request",
+                "label": "Approve action from frontend",
+                "metadata": {}
+              },
+              {
+                "id": "in_reject_request",
+                "label": "Reject action from frontend",
+                "metadata": {}
+              },
+              {
+                "id": "in_recommended_actions",
+                "label": "AI-generated recommended actions",
+                "metadata": {}
+              },
+              {
+                "id": "in_delivery_status",
+                "label": "Notification delivery status",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_actions_response",
+                "label": "Pending ActionItem[] JSON",
+                "metadata": {}
+              },
+              {
+                "id": "out_execute_command",
+                "label": "Normalized command for Twilio gateway",
+                "metadata": {}
+              },
+              {
+                "id": "out_action_update",
+                "label": "Updated status back to clients",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "logic",
+              "value": "Maintains pending actions store; on approval, emits normalized execution command; on delivery status, updates action status."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "backend_advisory_controller",
+            "label": "Advisory Controller",
+            "inputs": [
+              {
+                "id": "in_generate_advisory_request",
+                "label": "Prompt from frontend",
+                "metadata": {}
+              },
+              {
+                "id": "in_generated_draft",
+                "label": "Draft from LLM gateway",
+                "metadata": {}
+              },
+              {
+                "id": "in_publish_advisory",
+                "label": "Publish finalized advisory",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_llm_prompt",
+                "label": "Prompt + context to LLM gateway",
+                "metadata": {}
+              },
+              {
+                "id": "out_draft_response",
+                "label": "Draft text to frontend",
+                "metadata": {}
+              },
+              {
+                "id": "out_publish_command",
+                "label": "Broadcast command to messaging layer",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "logic",
+              "value": "Normalizes advisory prompts, attaches surge context, and delegates to OpenAI gateway; relays draft back to frontend and can trigger broadcast."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "backend_orchestrator",
+            "label": "Surge Orchestrator Agent",
+            "inputs": [
+              {
+                "id": "in_forecast_signals",
+                "label": "Surge forecast signals",
+                "metadata": {}
+              },
+              {
+                "id": "in_hospital_state",
+                "label": "Current hospital/equipment state",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_recommended_actions",
+                "label": "Recommended staffing/supply/advisory actions",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "logic",
+              "value": "Agent that interprets forecast output and recommends human-verifiable actions (staffing, supply, advisories)."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "backend_forecast_engine",
+            "label": "Surge Forecast Engine",
+            "inputs": [
+              {
+                "id": "in_time_series_data",
+                "label": "Historical admissions + env covariates",
+                "metadata": {}
+              },
+              {
+                "id": "in_realtime_events",
+                "label": "Latest ingested events",
+                "metadata": {}
+              },
+              {
+                "id": "in_graph_structure",
+                "label": "Hospital mobility graph",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_forecast_signals",
+                "label": "Forecasted occupancy + confidence",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "logic",
+              "value": "Wraps time-series and spatial models (e.g., Prophet/XGBoost + diffusion graph) to estimate demand 3\u201314 days ahead."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "backend_data_store",
+            "label": "Operational Data Store",
+            "inputs": [
+              {
+                "id": "in_ingested_batches",
+                "label": "Ingested data batches",
+                "metadata": {}
+              },
+              {
+                "id": "in_events",
+                "label": "Runtime events and action logs",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_hospital_state",
+                "label": "Current hospital state",
+                "metadata": {}
+              },
+              {
+                "id": "out_training_data",
+                "label": "Historical data for forecasting",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "config",
+              "value": "Represents relational/columnar store for admissions, resources, and event logs (e.g., PostgreSQL)."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "backend_twilio_gateway",
+            "label": "Twilio Messaging Gateway",
+            "inputs": [
+              {
+                "id": "in_execute_command",
+                "label": "Execution command with message + recipients",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_notifications",
+                "label": "Outbound SMS/WhatsApp messages",
+                "metadata": {}
+              },
+              {
+                "id": "out_delivery_status",
+                "label": "Delivery or failure status",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "code",
+              "value": "Wraps Twilio Messages API as in Backend/twilio_thing.md."
+            },
+            "graph": null,
+            "metadata": {
+              "file": "Backend/twilio_thing.md",
+              "env": ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "RECIPIENT"]
+            }
+          },
+          {
+            "id": "backend_openai_gateway",
+            "label": "OpenAI LLM Gateway",
+            "inputs": [
+              {
+                "id": "in_prompt",
+                "label": "Advisory prompt with context",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_draft_text",
+                "label": "Generated advisory text",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "code",
+              "value": "Calls chat/completions API for advisory drafting (e.g., GPT-4o)."
+            },
+            "graph": null,
+            "metadata": {
+              "env": ["OPENAI_API_KEY"]
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge_http_to_kpi_controller",
+            "from": {
+              "node": "backend_http_api",
+              "port": "out_kpi_request"
+            },
+            "to": {
+              "node": "backend_kpi_controller",
+              "port": "in_kpi_request"
+            },
+            "label": "Routes KPI requests",
+            "metadata": {}
+          },
+          {
+            "id": "edge_http_to_hospital_controller",
+            "from": {
+              "node": "backend_http_api",
+              "port": "out_nodes_request"
+            },
+            "to": {
+              "node": "backend_hospital_controller",
+              "port": "in_nodes_request"
+            },
+            "label": "Routes hospital list requests",
+            "metadata": {}
+          },
+          {
+            "id": "edge_http_to_actions_controller_list",
+            "from": {
+              "node": "backend_http_api",
+              "port": "out_actions_request"
+            },
+            "to": {
+              "node": "backend_actions_controller",
+              "port": "in_actions_request"
+            },
+            "label": "Routes pending actions list requests",
+            "metadata": {}
+          },
+          {
+            "id": "edge_http_to_actions_controller_approve",
+            "from": {
+              "node": "backend_http_api",
+              "port": "out_approve_request"
+            },
+            "to": {
+              "node": "backend_actions_controller",
+              "port": "in_approve_request"
+            },
+            "label": "Routes approve action requests",
+            "metadata": {}
+          },
+          {
+            "id": "edge_http_to_actions_controller_reject",
+            "from": {
+              "node": "backend_http_api",
+              "port": "out_reject_request"
+            },
+            "to": {
+              "node": "backend_actions_controller",
+              "port": "in_reject_request"
+            },
+            "label": "Routes reject action requests",
+            "metadata": {}
+          },
+          {
+            "id": "edge_http_to_advisory_controller_generate",
+            "from": {
+              "node": "backend_http_api",
+              "port": "out_generate_advisory_request"
+            },
+            "to": {
+              "node": "backend_advisory_controller",
+              "port": "in_generate_advisory_request"
+            },
+            "label": "Routes advisory generation requests",
+            "metadata": {}
+          },
+          {
+            "id": "edge_kpi_controller_to_http",
+            "from": {
+              "node": "backend_kpi_controller",
+              "port": "out_kpi_response"
+            },
+            "to": {
+              "node": "backend_http_api",
+              "port": "in_kpi_response"
+            },
+            "label": "Sends KPIMetrics response back to HTTP layer",
+            "metadata": {}
+          },
+          {
+            "id": "edge_hospital_controller_to_http",
+            "from": {
+              "node": "backend_hospital_controller",
+              "port": "out_nodes_response"
+            },
+            "to": {
+              "node": "backend_http_api",
+              "port": "in_nodes_response"
+            },
+            "label": "Sends hospital nodes response back to HTTP layer",
+            "metadata": {}
+          },
+          {
+            "id": "edge_actions_controller_to_http",
+            "from": {
+              "node": "backend_actions_controller",
+              "port": "out_action_update"
+            },
+            "to": {
+              "node": "backend_http_api",
+              "port": "in_actions_response"
+            },
+            "label": "Sends actions status updates back to HTTP layer",
+            "metadata": {}
+          },
+          {
+            "id": "edge_advisory_controller_to_http",
+            "from": {
+              "node": "backend_advisory_controller",
+              "port": "out_draft_response"
+            },
+            "to": {
+              "node": "backend_http_api",
+              "port": "in_advisory_response"
+            },
+            "label": "Sends advisory draft back to HTTP layer",
+            "metadata": {}
+          },
+          {
+            "id": "edge_data_store_to_kpi_controller",
+            "from": {
+              "node": "backend_data_store",
+              "port": "out_hospital_state"
+            },
+            "to": {
+              "node": "backend_kpi_controller",
+              "port": "in_hospital_state"
+            },
+            "label": "Provides latest hospital state for KPI computation",
+            "metadata": {}
+          },
+          {
+            "id": "edge_data_store_to_hospital_controller",
+            "from": {
+              "node": "backend_data_store",
+              "port": "out_hospital_state"
+            },
+            "to": {
+              "node": "backend_hospital_controller",
+              "port": "in_hospital_state"
+            },
+            "label": "Provides hospital state for /hospitals endpoint",
+            "metadata": {}
+          },
+          {
+            "id": "edge_data_store_to_forecast_engine",
+            "from": {
+              "node": "backend_data_store",
+              "port": "out_training_data"
+            },
+            "to": {
+              "node": "backend_forecast_engine",
+              "port": "in_time_series_data"
+            },
+            "label": "Provides historical data for forecasting",
+            "metadata": {}
+          },
+          {
+            "id": "edge_forecast_engine_to_kpi_controller",
+            "from": {
+              "node": "backend_forecast_engine",
+              "port": "out_forecast_signals"
+            },
+            "to": {
+              "node": "backend_kpi_controller",
+              "port": "in_forecast_signals"
+            },
+            "label": "Provides surge forecast signals to KPI controller",
+            "metadata": {}
+          },
+          {
+            "id": "edge_forecast_engine_to_orchestrator",
+            "from": {
+              "node": "backend_forecast_engine",
+              "port": "out_forecast_signals"
+            },
+            "to": {
+              "node": "backend_orchestrator",
+              "port": "in_forecast_signals"
+            },
+            "label": "Provides surge forecast signals to orchestrator",
+            "metadata": {}
+          },
+          {
+            "id": "edge_data_store_to_orchestrator",
+            "from": {
+              "node": "backend_data_store",
+              "port": "out_hospital_state"
+            },
+            "to": {
+              "node": "backend_orchestrator",
+              "port": "in_hospital_state"
+            },
+            "label": "Provides current hospital state to orchestrator",
+            "metadata": {}
+          },
+          {
+            "id": "edge_orchestrator_to_actions_controller",
+            "from": {
+              "node": "backend_orchestrator",
+              "port": "out_recommended_actions"
+            },
+            "to": {
+              "node": "backend_actions_controller",
+              "port": "in_recommended_actions"
+            },
+            "label": "Sends recommended actions for human review",
+            "metadata": {}
+          },
+          {
+            "id": "edge_actions_controller_to_twilio",
+            "from": {
+              "node": "backend_actions_controller",
+              "port": "out_execute_command"
+            },
+            "to": {
+              "node": "backend_twilio_gateway",
+              "port": "in_execute_command"
+            },
+            "label": "Triggers execution of approved actions via Twilio",
+            "metadata": {}
+          },
+          {
+            "id": "edge_twilio_to_actions_controller_status",
+            "from": {
+              "node": "backend_twilio_gateway",
+              "port": "out_delivery_status"
+            },
+            "to": {
+              "node": "backend_actions_controller",
+              "port": "in_delivery_status"
+            },
+            "label": "Delivery status updates for actions",
+            "metadata": {}
+          },
+          {
+            "id": "edge_advisory_controller_to_openai",
+            "from": {
+              "node": "backend_advisory_controller",
+              "port": "out_llm_prompt"
+            },
+            "to": {
+              "node": "backend_openai_gateway",
+              "port": "in_prompt"
+            },
+            "label": "Sends normalized advisory prompt to LLM",
+            "metadata": {}
+          },
+          {
+            "id": "edge_openai_to_advisory_controller",
+            "from": {
+              "node": "backend_openai_gateway",
+              "port": "out_draft_text"
+            },
+            "to": {
+              "node": "backend_advisory_controller",
+              "port": "in_generated_draft"
+            },
+            "label": "Returns advisory draft from LLM",
+            "metadata": {}
+          },
+          {
+            "id": "edge_advisory_controller_to_twilio_publish",
+            "from": {
+              "node": "backend_advisory_controller",
+              "port": "out_publish_command"
+            },
+            "to": {
+              "node": "backend_twilio_gateway",
+              "port": "in_execute_command"
+            },
+            "label": "Broadcasts finalized advisories via Twilio",
+            "metadata": {}
+          }
+        ],
+        "metadata": {
+          "status": "planned",
+          "suggestedStack": "Python FastAPI or Node/Express with async workers"
+        }
+      },
+      "metadata": {
+        "implementsInterface": "Frontend/src/types/index.ts::DataService",
+        "notes": "Not yet implemented; current demo uses frontend MockDataService only."
+      }
+    },
+    {
+      "id": "data_layer",
+      "label": "Data Layer & Ingestion",
+      "inputs": [],
+      "outputs": [
+        {
+          "id": "out_ingested_events",
+          "label": "Normalized event stream",
+          "metadata": {}
+        },
+        {
+          "id": "out_historical_batches",
+          "label": "Historical data batches",
+          "metadata": {}
+        }
+      ],
+      "content": {
+        "type": "config",
+        "value": "Represents ingestion of public APIs, mock EHR/CSV data, and festival/holiday signals."
+      },
+      "graph": {
+        "id": "data_layer_graph",
+        "nodes": [
+          {
+            "id": "public_api_fetcher",
+            "label": "Public API Fetcher",
+            "inputs": [],
+            "outputs": [
+              {
+                "id": "out_environmental_features",
+                "label": "Weather/AQI/holidays signals",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "logic",
+              "value": "Polls sources like weather, AQI, and holiday calendars."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "historical_ehr_ingestor",
+            "label": "Historical EHR Ingestor",
+            "inputs": [],
+            "outputs": [
+              {
+                "id": "out_historical_series",
+                "label": "Historical admission time series",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "logic",
+              "value": "Loads historical admissions and occupancy from CSV/SQL dump."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "mobility_graph_builder",
+            "label": "Mobility Graph Builder",
+            "inputs": [
+              {
+                "id": "in_regional_data",
+                "label": "Regional mobility/referral data",
+                "metadata": {}
+              }
+            ],
+            "outputs": [
+              {
+                "id": "out_graph_structure",
+                "label": "Hospital-level graph structure",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "logic",
+              "value": "Builds graph of hospitals and edges for diffusion modelling."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "demo_mock_source",
+            "label": "Demo Mock Data Source",
+            "inputs": [],
+            "outputs": [
+              {
+                "id": "out_mock_metrics",
+                "label": "Mock KPIMetrics",
+                "metadata": {}
+              },
+              {
+                "id": "out_mock_nodes",
+                "label": "Mock HospitalNode[]",
+                "metadata": {}
+              },
+              {
+                "id": "out_mock_actions",
+                "label": "Mock ActionItem[]",
+                "metadata": {}
+              }
+            ],
+            "content": {
+              "type": "code",
+              "value": "Represents MockDataService implementation in Frontend/src/services/MockDataService.ts.",
+              "files": ["Frontend/src/services/MockDataService.ts"]
+            },
+            "graph": null,
+            "metadata": {
+              "mode": "demo-only"
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge_public_api_to_mobility_builder",
+            "from": {
+              "node": "public_api_fetcher",
+              "port": "out_environmental_features"
+            },
+            "to": {
+              "node": "mobility_graph_builder",
+              "port": "in_regional_data"
+            },
+            "label": "Feeds regional data to build mobility graph",
+            "metadata": {}
+          }
+        ],
+        "metadata": {}
+      },
+      "metadata": {
+        "notes": "In MVP, much of this layer may be simulated or stubbed until real feeds are wired."
+      }
+    },
+    {
+      "id": "external_actors",
+      "label": "External Human Actors",
+      "inputs": [],
+      "outputs": [],
+      "content": {
+        "type": "text",
+        "value": "Represents people and organizations that receive messages or advisories."
+      },
+      "graph": {
+        "id": "external_actors_graph",
+        "nodes": [
+          {
+            "id": "actor_medical_staff",
+            "label": "Hospital Staff",
+            "inputs": [
+              {
+                "id": "in_notifications",
+                "label": "Shift change / surge notifications",
+                "metadata": {}
+              }
+            ],
+            "outputs": [],
+            "content": {
+              "type": "text",
+              "value": "Doctors, nurses, and support staff at monitored hospitals."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "actor_supply_vendors",
+            "label": "Supply Vendors",
+            "inputs": [
+              {
+                "id": "in_orders",
+                "label": "Purchase orders (e.g., oxygen)",
+                "metadata": {}
+              }
+            ],
+            "outputs": [],
+            "content": {
+              "type": "text",
+              "value": "External vendors that fulfill supply requests."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "actor_health_officials",
+            "label": "Health Officials",
+            "inputs": [
+              {
+                "id": "in_reports",
+                "label": "Situation reports, escalations",
+                "metadata": {}
+              }
+            ],
+            "outputs": [],
+            "content": {
+              "type": "text",
+              "value": "Civic or administrative health authorities."
+            },
+            "graph": null,
+            "metadata": {}
+          },
+          {
+            "id": "actor_general_public",
+            "label": "General Public",
+            "inputs": [
+              {
+                "id": "in_advisories",
+                "label": "Broadcast public health advisories",
+                "metadata": {}
+              }
+            ],
+            "outputs": [],
+            "content": {
+              "type": "text",
+              "value": "Residents within affected catchment areas."
+            },
+            "graph": null,
+            "metadata": {}
+          }
+        ],
+        "edges": [],
+        "metadata": {}
+      },
+      "metadata": {}
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_frontend_data_to_backend_http",
+      "from": {
+        "node": "data_service_client",
+        "port": "out_http_requests"
+      },
+      "to": {
+        "node": "backend_http_api",
+        "port": "in_http_request"
+      },
+      "label": "Live mode: DataService sends REST calls to backend",
+      "metadata": {
+        "mode": "live"
+      }
+    },
+    {
+      "id": "edge_backend_http_to_frontend_data",
+      "from": {
+        "node": "backend_http_api",
+        "port": "out_http_response"
+      },
+      "to": {
+        "node": "data_service_client",
+        "port": "in_http_response"
+      },
+      "label": "Live mode: backend HTTP API responds to DataService",
+      "metadata": {
+        "mode": "live"
+      }
+    },
+    {
+      "id": "edge_public_api_to_forecast_engine",
+      "from": {
+        "node": "public_api_fetcher",
+        "port": "out_environmental_features"
+      },
+      "to": {
+        "node": "backend_forecast_engine",
+        "port": "in_realtime_events"
+      },
+      "label": "Environmental covariates streamed into forecast engine",
+      "metadata": {}
+    },
+    {
+      "id": "edge_ehr_to_data_store",
+      "from": {
+        "node": "historical_ehr_ingestor",
+        "port": "out_historical_series"
+      },
+      "to": {
+        "node": "backend_data_store",
+        "port": "in_ingested_batches"
+      },
+      "label": "Historical admissions ingested into data store",
+      "metadata": {}
+    },
+    {
+      "id": "edge_mobility_graph_to_forecast_engine",
+      "from": {
+        "node": "mobility_graph_builder",
+        "port": "out_graph_structure"
+      },
+      "to": {
+        "node": "backend_forecast_engine",
+        "port": "in_graph_structure"
+      },
+      "label": "Mobility graph informs spatial diffusion model",
+      "metadata": {}
+    },
+    {
+      "id": "edge_epidemic_sidebar_to_dashboard_context",
+      "from": {
+        "node": "epidemic_control_sidebar",
+        "port": "out_epidemic_overlay"
+      },
+      "to": {
+        "node": "dashboard_context",
+        "port": "in_epidemic_overlay_update"
+      },
+      "label": "Sidebar injects manually curated epidemic overlay into context",
+      "metadata": {}
+    },
+    {
+      "id": "edge_twilio_to_staff",
+      "from": {
+        "node": "backend_twilio_gateway",
+        "port": "out_notifications"
+      },
+      "to": {
+        "node": "actor_medical_staff",
+        "port": "in_notifications"
+      },
+      "label": "Staff messaging (shifts, surge alerts)",
+      "metadata": {}
+    },
+    {
+      "id": "edge_twilio_to_vendors",
+      "from": {
+        "node": "backend_twilio_gateway",
+        "port": "out_notifications"
+      },
+      "to": {
+        "node": "actor_supply_vendors",
+        "port": "in_orders"
+      },
+      "label": "Purchase orders and supply alerts to vendors",
+      "metadata": {}
+    },
+    {
+      "id": "edge_twilio_to_officials",
+      "from": {
+        "node": "backend_twilio_gateway",
+        "port": "out_notifications"
+      },
+      "to": {
+        "node": "actor_health_officials",
+        "port": "in_reports"
+      },
+      "label": "Situation reports and escalations to officials",
+      "metadata": {}
+    },
+    {
+      "id": "edge_twilio_to_public",
+      "from": {
+        "node": "backend_twilio_gateway",
+        "port": "out_notifications"
+      },
+      "to": {
+        "node": "actor_general_public",
+        "port": "in_advisories"
+      },
+      "label": "Broadcast public health advisories",
+      "metadata": {}
+    },
+    {
+      "id": "edge_advisory_publish_to_backend",
+      "from": {
+        "node": "advisory_console_page",
+        "port": "out_publish_advisory"
+      },
+      "to": {
+        "node": "backend_advisory_controller",
+        "port": "in_publish_advisory"
+      },
+      "label": "User-approved advisories sent for backend broadcast",
+      "metadata": {}
+    }
+  ],
+  "metadata": {
+    "title": "SurgeGuard Autonomous Hospital Management System",
+    "overview": "MVP solution integrating public data streams and AI orchestration to predict patient surges and manage resources via human-verified automated actions.",
+    "hfgVersion": 2,
+    "lastUpdated": "2025-11-28T00:00:00Z",
+    "constraints": [
+      {
+        "id": "mvp_scope",
+        "label": "No Hardware Deployment",
+        "details": "Relies entirely on software endpoints; no physical sensors installed."
+      },
+      {
+        "id": "approval_logic",
+        "label": "Human-in-the-Loop Mandate",
+        "details": "No external message or order is sent without explicit user approval in the Action Hub or Advisory Console."
+      }
+    ],
+    "notes": [
+      "Every node id is globally unique across the entire hierarchy.",
+      "Edges reference nodes only by these global ids; ports are local to a node.",
+      "Root-level edges model cross-module flows (frontend \u2194 backend \u2194 data layer \u2194 external actors)."
+    ]
+  }
+}

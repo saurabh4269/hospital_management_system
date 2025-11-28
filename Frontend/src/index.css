@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Radar Silence Palette - Default Dark */
+    --background: 240 10% 3.9%; /* #09090b */
+    --foreground: 0 0% 93%; /* #ededed */
+
+    --card: 0 0% 4.7%; /* #0c0c0c */
+    --card-foreground: 0 0% 93%;
+
+    --popover: 0 0% 4.7%;
+    --popover-foreground: 0 0% 93%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%; /* #27272a */
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+
+    --radius: 0.5rem;
+  }
+
+  /* Force dark mode styles even without .dark class since we are global dark */
+  body {
+    @apply bg-background text-foreground font-grotesk;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .font-grotesk {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  
+  .font-mono {
+    font-family: 'Geist Mono', monospace;
+    font-feature-settings: "tnum";
+  }
+
+  .glass-grit {
+    @apply backdrop-blur-md bg-background/80;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  /* Vitals Panel Styles */
+  .vitals-card {
+    @apply bg-[#0c0c0c] border border-[#222] font-mono;
+  }
+
+  .metric-label {
+    @apply text-[#666] uppercase tracking-[0.05em] text-xs;
+  }
+
+  .metric-value {
+    @apply text-[#ededed] font-medium;
+  }
+
+  /* Alert State Styles */
+  .card-critical {
+    border-left: 2px solid #ff4d4d;
+    background: linear-gradient(90deg, rgba(255, 77, 77, 0.05) 0%, transparent 100%);
+  }
+
+  .status-text-critical {
+    @apply text-[#ff4d4d] font-grotesk;
+    text-shadow: 0 0 10px rgba(255, 77, 77, 0.4);
+  }
+}
+
+/* Custom Map Animations */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.33);
+    opacity: 0.8;
+  }
+  80%, 100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+.leaflet-interactive.animate-ping {
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  transform-origin: center center;
+  transform-box: fill-box;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+  @apply rounded-xl shadow-xl border border-[#222] p-0 overflow-hidden bg-[#0c0c0c] text-[#ededed];
+}
+
+.custom-popup .leaflet-popup-content {
+  @apply m-0;
+}
+
+.custom-popup .leaflet-popup-tip {
+  @apply bg-[#0c0c0c];
+}

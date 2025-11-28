@@ -1,0 +1,1 @@
+curl -sS --fail-with-body -X POST "https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages.json" -u "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN" --data-urlencode "From=+19284278507" --data-urlencode "To=$RECIPIENT" --data-urlencode "Body=Hello from curl"

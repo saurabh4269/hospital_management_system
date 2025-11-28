@@ -1,0 +1,53 @@
+[
+  {
+    "id": "hosp-1",
+    "name": "City Central Hospital",
+    "lat": 19.076,
+    "lng": 72.8777,
+    "occupancy": {
+      "icu_beds_used": 18,
+      "icu_beds_total": 24,
+      "ward_beds_used": 120,
+      "ward_beds_total": 180
+    },
+    "status": "WARNING",
+    "resources": {
+      "oxygen": "MEDIUM",
+      "staff_load": "HIGH"
+    }
+  },
+  {
+    "id": "hosp-2",
+    "name": "Suburban Care Clinic",
+    "lat": 19.21,
+    "lng": 72.85,
+    "occupancy": {
+      "icu_beds_used": 4,
+      "icu_beds_total": 10,
+      "ward_beds_used": 40,
+      "ward_beds_total": 80
+    },
+    "status": "NORMAL",
+    "resources": {
+      "oxygen": "HIGH",
+      "staff_load": "MEDIUM"
+    }
+  },
+  {
+    "id": "hosp-3",
+    "name": "Riverfront General Hospital",
+    "lat": 19.0,
+    "lng": 72.9,
+    "occupancy": {
+      "icu_beds_used": 22,
+      "icu_beds_total": 22,
+      "ward_beds_used": 160,
+      "ward_beds_total": 160
+    },
+    "status": "CRITICAL",
+    "resources": {
+      "oxygen": "LOW",
+      "staff_load": "HIGH"
+    }
+  }
+]

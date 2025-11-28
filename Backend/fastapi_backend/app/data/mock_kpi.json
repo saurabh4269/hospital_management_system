@@ -1,0 +1,8 @@
+{
+  "total_patients": 245,
+  "icu_occupancy": 0.78,
+  "ward_occupancy": 0.64,
+  "alert_count": 4,
+  "surge_confidence": 0.82,
+  "critical_hospital_count": 3
+}

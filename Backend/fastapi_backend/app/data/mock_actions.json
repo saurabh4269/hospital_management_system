@@ -1,0 +1,38 @@
+[
+  {
+    "id": "act-1",
+    "type": "STAFFING",
+    "target": "STAFF",
+    "channel": "SMS",
+    "recipients": ["+911234567890"],
+    "message_template": "High ICU load expected tonight. Requesting on-call staff to report 2 hours early.",
+    "message_final": null,
+    "status": "PENDING",
+    "created_at": "2025-11-28T18:00:00Z",
+    "updated_at": "2025-11-28T18:00:00Z"
+  },
+  {
+    "id": "act-2",
+    "type": "SUPPLY",
+    "target": "VENDOR",
+    "channel": "SMS",
+    "recipients": ["+911112223334"],
+    "message_template": "Projected oxygen demand increase of 30% over next 72 hours. Please confirm ability to supply 25 additional cylinders.",
+    "message_final": null,
+    "status": "PENDING",
+    "created_at": "2025-11-28T18:05:00Z",
+    "updated_at": "2025-11-28T18:05:00Z"
+  },
+  {
+    "id": "act-3",
+    "type": "ADVISORY",
+    "target": "PUBLIC",
+    "channel": "WHATSAPP",
+    "recipients": ["+919876543210"],
+    "message_template": "Air quality in Ward X is projected to be unhealthy over the weekend. Recommend limiting outdoor activity for elderly and children.",
+    "message_final": null,
+    "status": "PENDING",
+    "created_at": "2025-11-28T18:10:00Z",
+    "updated_at": "2025-11-28T18:10:00Z"
+  }
+]

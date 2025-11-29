@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./Backend/fastapi_backend
+    env_file:
+      - ./Backend/fastapi_backend/.env
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./Frontend
+    env_file:
+      - ./Frontend/.env
+    ports:
+      - "5173:80"
+    restart: unless-stopped
+
+# Usage:
+# 1) Copy env examples:
+#    cp Backend/fastapi_backend/.env.example Backend/fastapi_backend/.env
+#    cp Frontend/.env.example Frontend/.env
+# 2) Adjust values (TWILIO/OPENAI keys, VITE_DEMO_MODE, etc.)
+# 3) Build and run:
+#    docker-compose up --build
+#
+# Then visit http://localhost:5173 in your browser.
